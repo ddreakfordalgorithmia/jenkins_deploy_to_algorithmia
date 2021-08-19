@@ -85,14 +85,16 @@ print('UPLOADING model to '+data_path+'/'+MODEL_FILE)
 client.file(data_path+'/'+MODEL_FILE).putFile(ALGO_TEMPLATE_PATH+MODEL_FILE)
 
 # create the Algorithm
-print(f"CREATING algorithm: {algo_full_name}")
-print(f"ON Algorithmia cluster: {algo_endpoint}")
 try:
+    print(f"CREATING algorithm: {algo_full_name}")
+    print(f"ON Algorithmia cluster: {algo_endpoint}")
     print(algo.create(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
 except Exception as x:
     print(str(x))
     if 'already exists' in str(x):
         try:
+            print(f"UPDATING algorithm: {algo_full_name}")
+            print(f"ON Algorithmia cluster: {algo_endpoint}")
             print(algo.update(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
         except Exception as x:
             raise SystemExit('ERROR: could not UPDATE {}: \n{}'.format(algo_full_name, x))
