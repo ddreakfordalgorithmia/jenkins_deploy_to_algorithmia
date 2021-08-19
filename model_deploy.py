@@ -90,7 +90,13 @@ print(f"ON Algorithmia cluster: {algo_endpoint}")
 try:
     print(algo.create(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
 except Exception as x:
-    raise SystemExit('ERROR: cannot create {}: if the Algorithm already exists and you wish to overwrite it, remove/ignore this step\n{}'.format(algo_full_name, x))
+    if 'already exists' in x.__str__:
+        try:
+            print(algo.update(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
+        except Exception as x:
+            raise SystemExit('ERROR: could not UPDATE {}: \n{}'.format(algo_full_name, x))
+    else:
+        raise SystemExit('ERROR: could not CREATE {}: \n{}'.format(algo_full_name, x))
 
 # git clone the created algorithm's repo into a temp directory
 tmpdir = mkdtemp()
