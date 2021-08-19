@@ -53,7 +53,7 @@ algo_domain = environ.get('ALGORITHMIA_DOMAIN')
 algo_endpoint = f"https://{algo_domain}"
 username = environ.get('ALGORITHMIA_USERNAME')
 if not api_key:
-    raise SystemExit('Please set the environment variable ALGORITHMIA_MANAGEMENT_API_KEY (key must have permission to manage algorithms)')
+    raise SystemExit('Please set the environment variable ALGORITHMIA_API_KEY (key must have permission to manage algorithms)')
 if not algo_domain:
     raise SystemExit('Please set the environment variable ALGORITHMIA_DOMAIN (e.g. algorithmia.com')
 if not username:
