@@ -90,8 +90,8 @@ print(f"ON Algorithmia cluster: {algo_endpoint}")
 try:
     print(algo.create(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
 except Exception as x:
-    print(repr(x))
-    if 'already exists' in repr(x):
+    print(str(x))
+    if 'already exists' in str(x):
         try:
             print(algo.update(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
         except Exception as x:
