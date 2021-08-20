@@ -143,17 +143,7 @@ except:
     # print('RETRYING: if this occurs repeatedly, increase the sleep() time before the PUBLISH step to allow for compilation time')
     try:
         sleep(60)
-        results = algo.publish(
-            settings = {
-                "algorithm_callability": "private"
-            },
-            version_info = {
-                "release_notes": "Automatically created, deployed and published from Jenkins.",
-                "sample_input": "https://commons.wikimedia.org/wiki/File:Digital_Digits.png",
-                "version_type": "minor",
-            },
-            details = ALGORITHM_DETAILS        
-        )
+        results = algo.publish(version_info=ALGORITHM_VERSION_INFO)
     except Exception as x:
         raise SystemExit('ERROR: unable to publish Algorithm: code will not compile, or compile takes too long\n{}'.format(x))
 print(results)
