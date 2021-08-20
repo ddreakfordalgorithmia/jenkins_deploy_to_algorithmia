@@ -130,7 +130,7 @@ cloned_repo.git.add(all=True)
 cloned_repo.index.commit('Add algorithm files')
 
 # push changes (implicitly causes Algorithm to recompile on server)
-print('PUSHING local files to serving repo')
+print('PUSHING algorithm files to serving repo')
 origin = cloned_repo.remote(name='origin')
 origin.push()
 
