@@ -33,7 +33,9 @@ ALGORITHM_SETTINGS = {
 
 # config your publish settings as per https://docs.algorithmia.com/#publish-an-algorithm
 ALGORITHM_VERSION_INFO = {
-    'sample_input': 'https://github.com/algorithmiaio/sample-apps/blob/master/algo-dev-demo/digit_recognition/images/digit_1.png?raw=true'
+    "release_notes": "Automatically created, deployed and published from Jenkins.",
+    "sample_input": "https://commons.wikimedia.org/wiki/File:Digital_Digits.png",
+    "version_type": "minor"
 }
 
 # path within this repo where the algo.py, requirements.txt, and model file are located
@@ -130,7 +132,7 @@ cloned_repo.git.add(all=True)
 cloned_repo.index.commit('Add algorithm files')
 
 # push changes (implicitly causes Algorithm to recompile on server)
-print('PUSHING algorithm files to serving repo')
+print('PUSHING local files to serving repo')
 origin = cloned_repo.remote(name='origin')
 origin.push()
 
@@ -138,13 +140,26 @@ origin.push()
 print('PUBLISHING '+algo_full_name)
 sleep(15)
 try:
-    results = algo.publish(version_info=ALGORITHM_VERSION_INFO)
+    results = algo.publish(
+        settings = {
+            "algorithm_callability": "private"
+        },
+        version_info=ALGORITHM_VERSION_INFO,
+        details = ALGORITHM_DETAILS
+    )
 except:
-    print('RETRYING PUBLISH: if this occurs repeatedly, increase the sleep() time before the PUBLISH step to allow for compilation time')
+    # print('RETRYING: if this occurs repeatedly, increase the sleep() time before the PUBLISH step to allow for compilation time')
     try:
         sleep(60)
-        results = algo.publish(version_info=ALGORITHM_VERSION_INFO)
+        results = algo.publish(
+            settings = {
+                "algorithm_callability": "private"
+            },
+            version_info = ALGORITHM_VERSION_INFO,
+            details = ALGORITHM_DETAILS        
+        )
     except Exception as x:
         raise SystemExit('ERROR: unable to publish Algorithm: code will not compile, or compile takes too long\n{}'.format(x))
+
 print(results)
 print(f"DEPLOYED version {results.version_info.semantic_version} to {algo_endpoint}/algorithms/{algo_full_name}")
