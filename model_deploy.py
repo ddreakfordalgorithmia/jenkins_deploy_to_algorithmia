@@ -96,7 +96,7 @@ except Exception as x:
     if 'already exists' in str(x):
         try:
             print(f"UPDATING algorithm: {algo_full_name}")
-            print(algo.update(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
+            # print(algo.update(details=ALGORITHM_DETAILS, settings=ALGORITHM_SETTINGS))
         except Exception as x:
             raise SystemExit('ERROR: could not UPDATE {}: \n{}'.format(algo_full_name, x))
     else:
