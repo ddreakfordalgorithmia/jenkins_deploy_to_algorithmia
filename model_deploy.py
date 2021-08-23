@@ -143,7 +143,8 @@ sleep(15)
 try:
     results = algo.publish(
         settings = {
-            "algorithm_callability": "private"
+            "algorithm_callability": "private",
+            "insights_enabled" : True
         },
         version_info=ALGORITHM_VERSION_INFO,
         details = ALGORITHM_DETAILS
@@ -154,7 +155,8 @@ except:
         sleep(60)
         results = algo.publish(
             settings = {
-                "algorithm_callability": "private"
+                "algorithm_callability": "private",
+                "insights_enabled" : True            
             },
             version_info = ALGORITHM_VERSION_INFO,
             details = ALGORITHM_DETAILS        
