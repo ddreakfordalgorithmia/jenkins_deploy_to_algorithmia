@@ -36,7 +36,7 @@ ALGORITHM_VERSION_INFO = {
     "release_notes": "Automatically created, deployed and published from Jenkins.",
     "sample_input": "https://commons.wikimedia.org/wiki/File:Digital_Digits.png",
     "version_type": "minor",
-    "insights_enabled" : True
+    "insights_enabled" : "True"
 }
 
 # path within this repo where the algo.py, requirements.txt, and model file are located
