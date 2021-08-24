@@ -6,13 +6,6 @@ from joblib import load
 # DEBUG
 import logging
 
-# algo_username = os.getenv('ALGORITHMIA_USERNAME', None)
-api_key = os.getenv('ALGORITHMIA_API_KEY', None)
-algo_domain = os.getenv('ALGORITHMIA_DOMAIN', None)
-algo_endpoint = None
-if algo_domain is not None:
-    algo_endpoint = f"https://{algo_domain}"
-
 client = Algorithmia.client()
 
 # Model version A - Gradient boosting classifier
