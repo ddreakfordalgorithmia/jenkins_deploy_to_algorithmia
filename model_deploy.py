@@ -1,3 +1,4 @@
+from algorithm_template_v2.algo_details import ALGORITHM_DETAILS, ALGORITHM_NAME, ALGORITHM_SETTINGS, ALGORITHM_VERSION_INFO, ALGO_DETAILS, ALGO_TEMPLATE_PATH, FEATURE_IMAGES, MODEL_FILES
 import Algorithmia
 from datetime import datetime
 from git import Repo
@@ -6,49 +7,6 @@ from shutil import copyfile
 from six.moves.urllib.parse import quote_plus
 from tempfile import mkdtemp
 from time import sleep
-
-### --------- Algorithm name and metatadata ---------
-#
-
-# The algorithm will be created under https://{ALGORITHMIA_ENDPOINT}/algorithms/[YOUR_USERNAME]
-ALGO_NAME = 'digit_recognition'
-
-# The data collection will be created at https://{ALGORITHMIA_ENDPOINT}/data/{COLLECTION_NAME}
-# We use the algoritm name as the collection name here, but it could be any legal name
-COLLECTION_NAME = f"{ALGO_NAME}"
-
-# Config your algorithm details/settings as per https://docs.algorithmia.com/#create-an-algorithm
-ALGORITHM_DETAILS = {
-    'label': 'Digit Recognition',
-    'tagline': 'Digit recognition from an image file'
-}
-ALGORITHM_SETTINGS = {
-    'language': 'python3-1',
-    'source_visibility': 'closed',
-    'license': 'apl',
-    'network_access': 'full',
-    'pipeline_enabled': True,
-    'environment': 'cpu'
-}
-
-# config your publish settings as per https://docs.algorithmia.com/#publish-an-algorithm
-ALGORITHM_VERSION_INFO = {
-    "release_notes": "Automatically created, deployed and published from Jenkins.",
-    "sample_input": "https://commons.wikimedia.org/wiki/File:Digital_Digits.png",
-    "version_type": "minor",
-    "insights_enabled" : "True"
-}
-
-# path within this repo where the algo.py, requirements.txt, and model file are located
-ALGO_TEMPLATE_PATH = 'algorithm_template/'
-
-# name of the model file to be uploaded to Hosted Data
-MODEL_FILE = 'digits_classifier.pkl'
-
-# if you need to update the contents of algo.py during deployment, do so here
-def UPDATE_ALGORITHM_TEMPLATE(file_contents):
-    return file_contents.replace('data://username/demo/'+MODEL_FILE, data_path+'/'+MODEL_FILE)
-
 
 ### --------- REQUIRED ENVIRONMENT VARIABLES ----------
 #
@@ -70,24 +28,60 @@ if not algo_domain:
 if not username:
     raise SystemExit('Please set the environment variable ALGORITHMIA_USERNAME')
 
-# set up Algorithmia client and path names
+
+### --------- Algorithm Details ---------
+#
+if not ALGO_TEMPLATE_PATH:
+    raise SystemExit('ALGO_TEMPLATE_PATH has not been set (see ./algo_details.py)')
+
+# The algorithm will be created under https://ALGORITHMIA_ENDPOINT/ALGORITHMIA_USERNAME/ALGO_NAME
+ALGO_NAME = ALGORITHM_NAME
+if not ALGO_NAME:
+    raise SystemExit('ALGORITHM_NAME has not been set (see ./algo_details.py)')
+
+# The data collection will be created at https://ALGORITHMIA_ENDPOINT/data/ALGORITHMIA_USERNAME/COLLECTION_NAME
+# Here, we used the algoritm name as the collection name, but it could be any legal name.
+COLLECTION_NAME = f"{ALGO_NAME}"
+
+# Config algorithm details/settings as per https://docs.algorithmia.com/#create-an-algorithm
+if not ALGORITHM_DETAILS:
+    raise SystemExit('ALGORITHM_DETAILS has not been set (see ./algo_details.py)')
+if not ALGORITHM_SETTINGS:
+    raise SystemExit('ALGORITHM_SETTINGS has not been set (see ./algo_details.py)')
+if not ALGORITHM_VERSION_INFO:
+    raise SystemExit('ALGORITHM_VERSION_INFO has not been set (see ./algo_details.py)')
+
+# Simplistic template usage example.
+# If you need to update the contents of algo.py during deployment, do so here
+def UPDATE_ALGORITHM_TEMPLATE(file_contents):
+    return file_contents.replace('#algo_username#', username)
+
+# Set up Algorithmia client and path names
 algo_full_name = username+'/'+ALGO_NAME
 data_path = 'data://'+username+'/'+COLLECTION_NAME
 client = Algorithmia.client(api_key, algo_endpoint)
 algo = client.algo(algo_full_name)
 algo.set_options(timeout=300) # optional
 
-# create Hosted Data collection
+# Create Hosted Data collection
 print('CREATING '+data_path)
 print(f"ON Algorithmia cluster: {algo_endpoint}")
 if not client.dir(data_path).exists():
     client.dir(data_path).create()
 
-# upload the model file
-print('UPLOADING model to '+data_path+'/'+MODEL_FILE)
-client.file(data_path+'/'+MODEL_FILE).putFile(ALGO_TEMPLATE_PATH+MODEL_FILE)
+# Upload the model file(s)
+print('UPLOADING model file(s) to '+data_path)
+for modelFile in MODEL_FILES:
+    print(f"UPLOADING {data_path}/{modelFile}")
+    client.file(f"{data_path}/{modelFile}").putFile(f"{ALGO_TEMPLATE_PATH}/{modelFile}")
 
-# create the Algorithm
+# Upload other supporting files (e.g. for documentation)
+print('UPLOADING supporting file(s) to '+data_path)
+for auxFile in FEATURE_IMAGES:
+    print(f"UPLOADING {data_path}/{auxFile}")
+    client.file(f"{data_path}/{auxFile}").putFile(f"{ALGO_TEMPLATE_PATH}/{auxFile}")
+
+# Create the Algorithm on AE
 try:
     print(f"CREATING algorithm: {algo_full_name}")
     print(f"ON Algorithmia cluster: {algo_endpoint}")
@@ -115,14 +109,14 @@ cloned_repo = Repo.clone_from(algo_repo, tmpdir)
 print('ADDING algorithm files...')
 algorithm_file_name='{}.py'.format(algo_full_name.split('/')[1])
 # Add requirements.txt into repo
-copyfile(ALGO_TEMPLATE_PATH+'requirements.txt', tmpdir+'/requirements.txt')
+copyfile(ALGO_TEMPLATE_PATH+'/requirements.txt', tmpdir+'/requirements.txt')
 print(f"Copied requirements.txt to {tmpdir}/requirements.txt")
 # Add README.md into repo
-copyfile(ALGO_TEMPLATE_PATH+'README.md', tmpdir+'/README.md')
+copyfile(ALGO_TEMPLATE_PATH+'/README.md', tmpdir+'/README.md')
 print(f"Copied README.md to {tmpdir}/README.md")
 
 # Update the algorithm (replacing template values)
-algo_template = f"{ALGO_TEMPLATE_PATH}algo.py"
+algo_template = f"{ALGO_TEMPLATE_PATH}/algo.py"
 algo_to_push = f"{tmpdir}/src/{algorithm_file_name}"
 with open(algo_template, 'r+') as file_in:
     with open(algo_to_push, 'w+') as file_out:
@@ -138,8 +132,9 @@ origin = cloned_repo.remote(name='origin')
 origin.push()
 
 # wait for compile to complete, then publish the Algorithm
-print('PUBLISHING '+algo_full_name)
+print('Waiting for algorithm to compile...')
 sleep(15)
+print('PUBLISHING '+algo_full_name)
 try:
     results = algo.publish(
         settings = {
