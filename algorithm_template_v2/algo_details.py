@@ -2,17 +2,18 @@ import json
 
 # Path within this repo where the algo.py, requirements.txt, and model file are located
 ALGO_TEMPLATE_PATH = 'algorithm_template_v2'
+ALGO_DATA_PATH = f"{ALGO_TEMPLATE_PATH}/data"
 
 # Models to be deserialized and used for inference
 MODEL_FILES = [
-    'data/model-a.joblib',
-    'data/model-b.joblib'
+    'model-a.joblib',
+    'model-b.joblib'
 ]
 
 # Images referenced by algorithm README
 FEATURE_IMAGES = [
-    'data/features-a.png',
-    'data/features-b.png'
+    'features-a.png',
+    'features-b.png'
 ]
 
 # Config algorithm details/settings as per https://docs.algorithmia.com/#create-an-algorithm

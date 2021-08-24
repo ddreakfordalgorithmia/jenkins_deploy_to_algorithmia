@@ -1,4 +1,4 @@
-from algorithm_template_v2.algo_details import ALGORITHM_DETAILS, ALGORITHM_NAME, ALGORITHM_SETTINGS, ALGORITHM_VERSION_INFO, ALGO_TEMPLATE_PATH, FEATURE_IMAGES, MODEL_FILES
+from algorithm_template_v2.algo_details import ALGORITHM_DETAILS, ALGORITHM_NAME, ALGORITHM_SETTINGS, ALGORITHM_VERSION_INFO, ALGO_DATA_PATH, ALGO_TEMPLATE_PATH, FEATURE_IMAGES, MODEL_FILES
 import Algorithmia
 from datetime import datetime
 from git import Repo
@@ -73,13 +73,13 @@ if not client.dir(data_path).exists():
 print('UPLOADING model file(s) to '+data_path)
 for modelFile in MODEL_FILES:
     print(f"UPLOADING {data_path}/{modelFile}")
-    client.file(f"{data_path}/{modelFile}").putFile(f"{ALGO_TEMPLATE_PATH}/{modelFile}")
+    client.file(f"{data_path}/{modelFile}").putFile(f"{ALGO_DATA_PATH}/{modelFile}")
 
 # Upload other supporting files (e.g. for documentation)
 print('UPLOADING supporting file(s) to '+data_path)
 for auxFile in FEATURE_IMAGES:
     print(f"UPLOADING {data_path}/{auxFile}")
-    client.file(f"{data_path}/{auxFile}").putFile(f"{ALGO_TEMPLATE_PATH}/{auxFile}")
+    client.file(f"{data_path}/{auxFile}").putFile(f"{ALGO_DATA_PATH}/{auxFile}")
 
 # Create the Algorithm on AE
 try:
