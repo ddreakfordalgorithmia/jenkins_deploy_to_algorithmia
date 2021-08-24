@@ -1,7 +1,7 @@
 import json
 
 # Path within this repo where the algo.py, requirements.txt, and model file are located
-ALGO_TEMPLATE_PATH = 'algorithm_template_v2'
+ALGO_TEMPLATE_PATH = 'algorithm_credit_approval'
 ALGO_DATA_PATH = f"{ALGO_TEMPLATE_PATH}/data"
 
 # Models to be deserialized and used for inference
