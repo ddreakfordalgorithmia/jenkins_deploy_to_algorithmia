@@ -5,14 +5,14 @@ ALGO_TEMPLATE_PATH = 'algorithm_template_v2'
 
 # Models to be deserialized and used for inference
 MODEL_FILES = [
-    'algorithm_template_v2/data/model-a.joblib',
-    'algorithm_template_v2/data/model-b.joblib'
+    'data/model-a.joblib',
+    'data/model-b.joblib'
 ]
 
 # Images referenced by algorithm README
 FEATURE_IMAGES = [
-    'algorithm_template_v2/data/features-a.png',
-    'algorithm_template_v2/data/features-b.png'
+    'data/features-a.png',
+    'data/features-b.png'
 ]
 
 # Config algorithm details/settings as per https://docs.algorithmia.com/#create-an-algorithm
