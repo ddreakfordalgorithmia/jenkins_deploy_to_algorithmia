@@ -13,7 +13,7 @@ algo_endpoint = None
 if algo_domain is not None:
     algo_endpoint = f"https://{algo_domain}"
 
-client = Algorithmia.client(api_key, algo_endpoint)
+client = Algorithmia.client()
 
 # Model version A - Gradient boosting classifier
 #model = load(client.file("data://#algo_username#/CreditCardApproval/model-a.joblib").getFile().name)
