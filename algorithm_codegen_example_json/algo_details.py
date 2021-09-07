@@ -30,13 +30,13 @@ ALGORITHM_DETAILS = {
 
 # This algorithm uses the "Python 3.7 + H2O" environment
 ALGORITHM_SETTINGS = {
-    'language': 'python3',
+    # 'language': 'python3',
     'algorithm_environment': '0175c4fb-aa63-46ba-9a53-9571c7df5e73',
     'source_visibility': 'closed',
     'license': 'apl',
     'network_access': 'full',
-    'pipeline_enabled': True,
-    'environment': 'cpu'
+    'pipeline_enabled': True
+    # 'environment': 'cpu'
 }
 
 # SAMPLE_INPUT = [
