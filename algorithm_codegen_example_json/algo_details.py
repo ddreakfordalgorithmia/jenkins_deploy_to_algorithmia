@@ -32,7 +32,7 @@ ALGORITHM_DETAILS = {
 # This algorithm uses Python 3.7 and runs on CPU
 ALGORITHM_SETTINGS = {
     # 'algorithm_environment': '0175c4fb-aa63-46ba-9a53-9571c7df5e73', # Python 3.7 + H2O
-    'language': 'python3',
+    'language': 'python3-1',
     'environment': 'cpu',
     'source_visibility': 'closed',
     'license': 'apl',
