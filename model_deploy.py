@@ -1,6 +1,5 @@
 #from algorithm_credit_approval.algo_details import ALGORITHM_DETAILS, ALGORITHM_NAME, ALGORITHM_SETTINGS, ALGORITHM_VERSION_INFO, ALGO_DATA_PATH, ALGO_TEMPLATE_PATH, FEATURE_IMAGES, MODEL_FILES
 from algorithm_codegen_example_json.algo_details import ALGORITHM_DETAILS, ALGORITHM_NAME, ALGORITHM_SETTINGS, ALGORITHM_VERSION_INFO, ALGO_DATA_PATH, ALGO_TEMPLATE_PATH, FEATURE_IMAGES, MODEL_FILES
-
 import Algorithmia
 from datetime import datetime
 from git import Repo
